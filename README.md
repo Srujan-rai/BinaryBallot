@@ -1,0 +1,2 @@
+# BinaryBallot
+smart voting machine
