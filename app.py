@@ -3,19 +3,17 @@ import serial
 
 app=Flask(__name__)
 
-ser=serial.Serial('COM3',9600)
-while True:
-    ser.write("yes")
-    data = ser.readline().decode().strip()
-    print("Data from Arduino:", data)
-    ser.write("yes")
-    
+#ser=serial.Serial('COM3',9600)
 
-ser.close()
+
 
 @app.route('/')
 def home():
-    return "<h1>hello</h1>"
+    #ser.write("yes")
+    #data = ser.readline().decode().strip()
+    print("Data from Arduino:")
+    #ser.close()
+    return "<h1>testing</h1>"
 
 
 
