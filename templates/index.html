@@ -3,16 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
+    <title>Binary Ballot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 18px;
+            color: green;
+        }
+    </style>
 </head>
 <body>
-    <h1>Index Page</h1>
-    <button id="btn">Press Me</button>
+    <div class="container">
+        <h1>Binary Ballot</h1>
+        <button id="sendYesButton">Send Yes</button>
+        <div id="message"></div>
+    </div>
     <script>
-        document.getElementById('btn').addEventListener('click', function() {
-            fetch('/button_press', { method: 'POST' });
-            window.location.href = '/response';
+        document.getElementById('sendYesButton').addEventListener('click', function() {
+            fetch('/send_yes', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status) {
+                    document.getElementById('message').innerText = "Message Sent: " + data.status;
+                } else {
+                    document.getElementById('message').innerText = "Error: " + data.error;
+                }
+            });
         });
+
+        function checkButtonStatus() {
+            fetch('/button_status')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = "Button Status: " + data.button;
+            });
+        }
+
+        setInterval(checkButtonStatus, 1000); // Check button status every second
     </script>
 </body>
 </html>
