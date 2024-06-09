@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Ballot - Page 3</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            text-align: center;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 18px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Binary Ballot - Page 3</h1>
+        <div id="message">Sending "yes"...</div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/send_yes', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status) {
+                    checkButtonStatus();
+                } else {
+                    document.getElementById('message').innerText = "Error: " + data.error;
+                }
+            });
+        });
+
+        function checkButtonStatus() {
+            fetch('/button_status')
+            .then(response => response.json())
+            .then(data => {
+                if (data.button === "done") {
+                    fetch('/next_page', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        window.location.href = data.next_page;
+                    });
+                } else {
+                    document.getElementById('message').innerText = "Button Status: " + data.button;
+                    setTimeout(checkButtonStatus, 1000);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
